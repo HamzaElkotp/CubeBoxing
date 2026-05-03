@@ -23,6 +23,8 @@ public class PlayerMovement : MonoBehaviour {
     public float pushDuration;
     public float pushForce;
     public float pushSpeedMultiplier;
+    public float pushCooldown = 5f;
+    private float lastPushTime;
 
     private bool isPushing = false;
     private float pushTimer = 0f;
@@ -56,6 +58,7 @@ public class PlayerMovement : MonoBehaviour {
 
         // Only push when we are actually moving forward
         Vector3 pushDir = new Vector3(hit.moveDirection.x, 0, hit.moveDirection.z);
+        //Vector3 pushDir = transform.forward;
 
         if (pushDir.magnitude < 0.1f) return;
 
@@ -109,9 +112,10 @@ public class PlayerMovement : MonoBehaviour {
 
         lastPosition = gameObject.transform.position;
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && Time.time >= lastPushTime + pushCooldown)
         {
             StartPush();
+            lastPushTime = Time.time;
         }
 
         HandlePush();

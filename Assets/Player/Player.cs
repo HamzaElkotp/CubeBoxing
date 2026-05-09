@@ -24,6 +24,8 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!GameManager.Instance.IsGamePlaying()) {  return; }
+
         Vector3 inputVect = gameInput.GetMovementVector();
 
         inputVect = inputVect.normalized;

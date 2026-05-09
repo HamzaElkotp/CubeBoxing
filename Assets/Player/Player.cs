@@ -6,7 +6,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float moveSpeed = 9f;
     [SerializeField] private float rotationSpeed = 8f;
     [SerializeField] private float jumpForce = 15f;
-    [SerializeField] private float gravity = -15f;
+    [SerializeField] private float gravity = -9.8f;
     [SerializeField] private GameInput gameInput;
     [SerializeField] private AudioSource moveAudioSource;
     [SerializeField] private AudioSource jumpAudioSource;

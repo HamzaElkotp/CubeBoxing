@@ -5,8 +5,8 @@ public class Player : MonoBehaviour
 
     [SerializeField] private float moveSpeed = 9f;
     [SerializeField] private float rotationSpeed = 8f;
-    [SerializeField] private float jumpForce = 120f;
-    [SerializeField] private float gravity = -20.81f;
+    [SerializeField] private float jumpForce = 15f;
+    [SerializeField] private float gravity = -15f;
     [SerializeField] private GameInput gameInput;
 
     private float verticalVelocity;
@@ -26,12 +26,11 @@ public class Player : MonoBehaviour
         inputVect = inputVect.normalized;
         Vector3 moveDir = inputVect * moveSpeed;
 
-        isGrounded = transform.position.y <= 0.1f;
+        isGrounded = transform.position.y <= 0f;
 
         if (isGrounded && verticalVelocity < 0)
         {
-            // Reset velocity when hitting the floor
-            verticalVelocity = -2f;
+            verticalVelocity = 0f;
         }
 
         if (isGrounded && gameInput.IsJumpPressed())
@@ -39,7 +38,7 @@ public class Player : MonoBehaviour
             verticalVelocity = jumpForce;
         }
 
-        //verticalVelocity += gravity * Time.deltaTime;
+        verticalVelocity += gravity * Time.deltaTime;
 
         Vector3 finalMovement = moveDir;
         finalMovement.y = verticalVelocity;

@@ -31,9 +31,8 @@ public class Player : MonoBehaviour
 
         bool isMoving = (inputVect.x + inputVect.z) != 0;
 
-        if (isMoving)
+        if (isMoving && isGrounded)
         {
-            Debug.Log("movings");
             if (!moveAudioSource.isPlaying)
             {
                 moveAudioSource.Play();
@@ -41,7 +40,6 @@ public class Player : MonoBehaviour
         }
         else
         {
-            Debug.Log("stoped");
             if (moveAudioSource.isPlaying)
             {
                 moveAudioSource.Stop();
@@ -50,14 +48,18 @@ public class Player : MonoBehaviour
 
         isGrounded = transform.position.y <= 0f;
 
-        if (isGrounded && verticalVelocity <= 0 && jumped)
+        if (transform.position.y <= 2.2f && verticalVelocity <= 2.2f && jumped)
         {
             if (!jumpAudioSource.isPlaying)
             {
                 jumpAudioSource.Play();
             }
-            verticalVelocity = 0f;
             jumped = false;
+        }
+
+        if (isGrounded && verticalVelocity <= 0 && jumped)
+        {
+            verticalVelocity = 0f;
         }
 
         if (isGrounded && gameInput.IsJumpPressed())

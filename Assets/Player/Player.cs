@@ -89,9 +89,6 @@ public class Player : MonoBehaviour
         controller.Move(finalMovement * Time.deltaTime);
     }
 
-    // ─────────────────────────────────────────────────────────────────
-    //  HIT MECHANIC
-    // ─────────────────────────────────────────────────────────────────
 
     [Header("Hit Settings")]
     [SerializeField] private float hitSpeedMultiplier = 2.5f;  // peak speed scale during hit
@@ -143,10 +140,6 @@ public class Player : MonoBehaviour
         hitBoostCurve  = Mathf.SmoothStep(0f, 1f, progress);
     }
 
-    /// <summary>
-    /// Called automatically by CharacterController on every collision.
-    /// Applies a scaled impulse to any Rigidbody we make contact with during a hit.
-    /// </summary>
     void OnControllerColliderHit(ControllerColliderHit hit)
     {
         if (!isHitting) return;

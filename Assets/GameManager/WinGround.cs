@@ -1,13 +1,13 @@
 using UnityEngine;
 
-public class LoseGround : MonoBehaviour
+public class WinGround : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log("Lose");
-            GameManager.Instance.SetGameOver();
+            Debug.Log("win");
+            GameManager.Instance.SetGameWin();
         }
     }
 }

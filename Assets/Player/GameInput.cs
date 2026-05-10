@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class GameInput : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     public Vector3 GetMovementVector()
     {
         Vector3 inputVect = new Vector3(0, 0, 0);
@@ -17,7 +16,6 @@ public class GameInput : MonoBehaviour
 
     public bool IsJumpPressed()
     {
-        // GetKeyDown returns true only on the frame the button is first pressed
         return Input.GetKeyDown(KeyCode.Space);
     }
 }

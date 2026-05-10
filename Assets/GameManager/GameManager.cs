@@ -21,7 +21,6 @@ public class GameManager : MonoBehaviour
     private State state;
     private float mockloading = 2f;
     private float waitingToStartTimer = 3f;
-    private float mockPlaying = 30f;
 
     void Awake()
     {
@@ -33,7 +32,6 @@ public class GameManager : MonoBehaviour
         state = State.Loading;
     }
 
-    // Update is called once per frame
     void Update()
     {
         switch (state)
@@ -55,16 +53,6 @@ public class GameManager : MonoBehaviour
                     OnStateChanged?.Invoke(this, EventArgs.Empty);
                 }
                 break;
-            case State.GamePlaying:
-                mockPlaying -= Time.deltaTime;
-                if(mockPlaying < 0f)
-                {
-                    state = State.GameWin;
-                    mockPlaying = 10f;
-                    OnStateChanged?.Invoke(this, EventArgs.Empty);
-                }
-                break;
-
         }
 
         Debug.Log(state);
@@ -80,6 +68,15 @@ public class GameManager : MonoBehaviour
         if (state == State.GamePlaying)
         {
             state = State.GameOver;
+            OnStateChanged?.Invoke(this, EventArgs.Empty);
+        }
+    }
+
+    public void SetGameWin()
+    {
+        if (state == State.GamePlaying)
+        {
+            state = State.GameWin;
             OnStateChanged?.Invoke(this, EventArgs.Empty);
         }
     }

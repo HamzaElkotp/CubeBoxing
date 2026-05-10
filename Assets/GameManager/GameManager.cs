@@ -8,6 +8,8 @@ public class GameManager : MonoBehaviour
 
     public event EventHandler OnStateChanged;
 
+    [SerializeField] private AudioSource audiossSource;
+
     private enum State
     {
         Lobby,
@@ -19,7 +21,7 @@ public class GameManager : MonoBehaviour
     }
 
     private State state;
-    private float mockloading = 2f;
+    private float mockloading = 0f;
     private float waitingToStartTimer = 3f;
 
     void Awake()
@@ -30,6 +32,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         state = State.Loading;
+        if (!audiossSource.isPlaying) audiossSource.Play();
     }
 
     void Update()
@@ -47,11 +50,20 @@ public class GameManager : MonoBehaviour
                 break;
             case State.CountDownStart:
                 waitingToStartTimer -= Time.deltaTime;
-                if(waitingToStartTimer < 0f)
+                if (waitingToStartTimer < 0f)
                 {
                     state = State.GamePlaying;
                     OnStateChanged?.Invoke(this, EventArgs.Empty);
                 }
+                break;
+            case State.GamePlaying:
+                if (audiossSource.isPlaying) audiossSource.Stop();
+                break;
+            case State.GameOver:
+                if (!audiossSource.isPlaying) audiossSource.Play();
+                break;
+            case State.GameWin:
+                if (!audiossSource.isPlaying) audiossSource.Play();
                 break;
         }
 
@@ -62,6 +74,7 @@ public class GameManager : MonoBehaviour
     public bool IsCountDownToSTartActive() { return state == State.CountDownStart; }
     public bool IsGamePlaying()             { return state == State.GamePlaying; }
     public bool IsGameOver()                { return state == State.GameOver; }
+    public bool IsGameWin()                 { return state == State.GameWin; }
 
     public void SetGameOver()
     {

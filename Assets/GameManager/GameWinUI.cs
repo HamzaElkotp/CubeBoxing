@@ -1,7 +1,6 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
 public class GameWinUI : MonoBehaviour
 {
     [Header("References")]
@@ -16,7 +15,7 @@ public class GameWinUI : MonoBehaviour
 
     private void OnStateChanged(object sender, System.EventArgs e)
     {
-        if (GameManager.Instance.IsGameOver())
+        if (GameManager.Instance.IsGameWin())
         {
             gameObject.SetActive(true);
             Cursor.lockState = CursorLockMode.None;

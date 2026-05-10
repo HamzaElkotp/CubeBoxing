@@ -610,7 +610,7 @@ Transform:
   m_GameObject: {fileID: 387537466}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.182, y: 2.233, z: -1.122}
+  m_LocalPosition: {x: 5.27, y: 2.233, z: 0.07}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1235,13 +1235,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 631539439}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.014578362, y: 0.7990301, z: -0.019388353, w: 0.60080147}
+  m_LocalRotation: {x: 0.011877412, y: 0.71226424, z: -0.021150982, w: 0.70149213}
   m_LocalPosition: {x: -3.3225503, y: 2.24, z: -0.86096}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 2.78, y: 106.12, z: 0}
+  m_LocalEulerAnglesHint: {x: 2.682, y: 90.856, z: -0.732}
 --- !u!114 &631539441
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1634,6 +1634,7 @@ GameObject:
   - component: {fileID: 1289438052}
   - component: {fileID: 1289438053}
   - component: {fileID: 1289438055}
+  - component: {fileID: 1289438056}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -1650,7 +1651,7 @@ Transform:
   m_GameObject: {fileID: 1289438051}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.22745, y: 0, z: -0.86096}
+  m_LocalPosition: {x: 6.22745, y: 0, z: -1.68}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1659,6 +1660,7 @@ Transform:
   - {fileID: 536414048}
   - {fileID: 1713994883}
   - {fileID: 1796056701}
+  - {fileID: 1811435592}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1289438053
@@ -1675,11 +1677,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Player
   moveSpeed: 12
   rotationSpeed: 6
-  jumpForce: 10
+  jumpForce: 5
   gravity: -17
   gameInput: {fileID: 2097714775}
   moveAudioSource: {fileID: 1713994882}
   jumpAudioSource: {fileID: 1796056700}
+  groundCheck: {fileID: 1811435592}
+  groundDistance: 0.4
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!114 &1289438055
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1710,6 +1717,31 @@ MonoBehaviour:
   m_DefaultActionMap: 
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!143 &1289438056
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1289438051}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Height: 1.62
+  m_Radius: 1.02
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: -0.03, y: 1.15, z: -0.98}
 --- !u!1 &1311048085
 GameObject:
   m_ObjectHideFlags: 0
@@ -2292,6 +2324,37 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1289438052}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1811435591
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1811435592}
+  m_Layer: 0
+  m_Name: GroundCheck
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1811435592
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1811435591}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -1.41}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

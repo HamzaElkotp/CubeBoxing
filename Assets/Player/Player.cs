@@ -2,83 +2,79 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-
     [SerializeField] private float moveSpeed = 9f;
     [SerializeField] private float rotationSpeed = 8f;
     [SerializeField] private float jumpForce = 15f;
-    [SerializeField] private float gravity = -9.8f;
+    [SerializeField] private float gravity = -20f;
     [SerializeField] private GameInput gameInput;
     [SerializeField] private AudioSource moveAudioSource;
     [SerializeField] private AudioSource jumpAudioSource;
 
+    [Header("Ground Check")]
+    [SerializeField] private Transform groundCheck;
+    [SerializeField] private float groundDistance = 0.4f;
+    [SerializeField] private LayerMask groundMask;
+
+    private CharacterController controller;
     private float verticalVelocity;
     private bool isGrounded;
     private bool jumped = false;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        controller = GetComponent<CharacterController>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (!GameManager.Instance.IsGamePlaying()) {  return; }
+        if (!GameManager.Instance.IsGamePlaying()) { return; }
 
-        Vector3 inputVect = gameInput.GetMovementVector();
+        // ── Ground detection via sphere cast (works on any surface, not just y=0) ──
+        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
-        inputVect = inputVect.normalized;
-        Vector3 moveDir = inputVect * moveSpeed;
+        // Reset downward velocity when grounded so we don't accumulate infinite gravity
+        if (isGrounded && verticalVelocity < 0f)
+        {
+            verticalVelocity = -2f; // small negative keeps CheckSphere reliable
+        }
 
-        bool isMoving = (inputVect.x + inputVect.z) != 0;
+        // ── Horizontal movement (unchanged input logic) ──
+        Vector3 inputVect = gameInput.GetMovementVector().normalized;
+        Vector3 moveDir = (transform.right * inputVect.x + transform.forward * inputVect.z) * moveSpeed;
 
+        bool isMoving = (inputVect.x != 0 || inputVect.z != 0);
+
+        // ── Footstep audio (unchanged) ──
         if (isMoving && isGrounded)
         {
-            if (!moveAudioSource.isPlaying)
-            {
-                moveAudioSource.Play();
-            }
+            if (!moveAudioSource.isPlaying) moveAudioSource.Play();
         }
         else
         {
-            if (moveAudioSource.isPlaying)
-            {
-                moveAudioSource.Stop();
-            }
+            if (moveAudioSource.isPlaying) moveAudioSource.Stop();
         }
 
-        isGrounded = transform.position.y <= 0f;
-
-        if (transform.position.y <= 2.2f && verticalVelocity <= 2.2f && jumped)
-        {
-            if (!jumpAudioSource.isPlaying)
-            {
-                jumpAudioSource.Play();
-            }
-            jumped = false;
-        }
-
-        if (isGrounded && verticalVelocity <= 0 && jumped)
-        {
-            verticalVelocity = 0f;
-        }
-
+        // ── Jump ──
         if (isGrounded && gameInput.IsJumpPressed())
         {
             jumped = true;
-            verticalVelocity = jumpForce;
+            // v = sqrt(jumpForce * -2 * gravity) gives predictable jump height
+            verticalVelocity = Mathf.Sqrt(jumpForce * -2f * gravity);
         }
 
+        // ── Landing audio (plays when descending near ground) ──
+        if (isGrounded && verticalVelocity <= 0f && jumped)
+        {
+            if (!jumpAudioSource.isPlaying) jumpAudioSource.Play();
+            jumped = false;
+        }
+
+        // ── Apply gravity ──
         verticalVelocity += gravity * Time.deltaTime;
 
+        // ── Move via CharacterController (collision-safe) ──
         Vector3 finalMovement = moveDir;
         finalMovement.y = verticalVelocity;
-
-        transform.position += finalMovement * Time.deltaTime;
-
-
-        // Keep player from falling through the floor
-        if (transform.position.y < 0) transform.position = new Vector3(transform.position.x, 0, transform.position.z);
+        controller.Move(finalMovement * Time.deltaTime);
     }
 }

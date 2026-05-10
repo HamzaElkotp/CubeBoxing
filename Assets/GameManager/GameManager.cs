@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
     private State state;
     private float mockloading = 2f;
     private float waitingToStartTimer = 3f;
-    private float mockPlaying = 10f;
+    private float mockPlaying = 30f;
 
     void Awake()
     {
